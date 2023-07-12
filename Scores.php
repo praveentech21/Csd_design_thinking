@@ -134,7 +134,7 @@
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                      <img src="Bhavani/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                      <img src="Bhavani/img/avatars/sureshsir.png" alt class="w-px-40 h-auto rounded-circle" />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
@@ -183,10 +183,10 @@
                       
                       <form method="post" action="#">
                         <div class="mb-3">
-                          <label class="form-label" for="basic-default-fullname"><?php echo $row1['student_name'] ?></label>
+                          <label class="form-label" for="basic-default-fullname"><?php echo $row1['regno'] ?></label>
                           <?php while($row2 = mysqli_fetch_assoc($student1)){ ?>
                             <label class="form-label" for="basic-default-fullname"></label>
-                          <input type="<?php  if($row2['regno'] == $row1['regno'])  echo 'hidden';  else echo 'number';?>" name="<?php echo $row2['regno'] ?>" class="form-control" id="basic-default-fullname"  placeholder="<?php echo $row2['student_name'] ?>" <?php  if($row2['regno'] == $row1['regno'])  echo 'value=0'; ?> />
+                          <input type="<?php  if($row2['regno'] == $row1['regno'])  echo 'hidden';  else echo 'number';?>" name="<?php echo $row2['regno'] ?>" class="form-control" id="basic-default-fullname"  placeholder="<?php echo $row2['regno'] ?>" <?php  if($row2['regno'] == $row1['regno'])  echo 'value=0'; ?> />
                           <?php } ?>
                         </div>
                         <input type="hidden" name="team" value="<?php echo $row['team_id']; ?>">
