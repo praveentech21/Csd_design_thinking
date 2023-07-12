@@ -5,12 +5,12 @@
   $teams = mysqli_query($con,"SELECT * FROM teams");
   if(isset($_POST['submit'])){
     $team = $_POST['team'];
-    $regno1 = $_POST['regno'];
     $student = mysqli_query($con,"SELECT * FROM students where team ='$team' ");
+    $scrby = $_POST['scrby'];
     while($row = mysqli_fetch_assoc($student)){
       $score = $_POST[$row['regno']];
-      $regno = $row['regno'];
-      $sql = mysqli_query($con,"insert into score (scrto,scrby,team,score) values ('$regno1','$regno','$team','$score')");
+      $scrto = $_POST[$row['regno'].'1'];
+      $sql = mysqli_query($con,"insert into score (scrto,scrby,team,score) values ('$scrto','$scrby','$team','$score')");
     }
   }
 ?>
@@ -166,7 +166,6 @@
               <?php
                 while($row = mysqli_fetch_assoc($teams)){
                   $student = mysqli_query($con,"SELECT * FROM students WHERE team = '{$row['team_id']}'");
-                  $student1 = mysqli_query($con,"SELECT * FROM students WHERE team = '{$row['team_id']}'");
                 ?>
               <!-- Basic Layout -->
                 <div class="row">
@@ -174,7 +173,7 @@
                     <h5 class="mb-0"><?php echo $row['team_name'] ?></h5>
                   </div>
                   <?php  while($row1 = mysqli_fetch_assoc($student)){
-                      $score_check = mysqli_query($con,"SELECT * FROM score WHERE scrto = '{$row1['regno']}'  AND team = '{$row['team_id']}'");
+                      $score_check = mysqli_query($con,"SELECT * FROM score WHERE scrby = '{$row1['regno']}'  AND team = '{$row['team_id']}'");
                       if(mysqli_num_rows($score_check) == 0){ 
                       $student1 = mysqli_query($con,"SELECT * FROM students WHERE team = '{$row['team_id']}'");  ?>
                 <div class="col-xl">
@@ -184,13 +183,14 @@
                       <form method="post" action="#">
                         <div class="mb-3">
                           <label class="form-label" for="basic-default-fullname"><?php echo $row1['regno'] ?></label>
-                          <?php while($row2 = mysqli_fetch_assoc($student1)){ ?>
+                          <?php while($row2 = mysqli_fetch_assoc($student1)){  ?>
                             <label class="form-label" for="basic-default-fullname"></label>
                           <input type="<?php  if($row2['regno'] == $row1['regno'])  echo 'hidden';  else echo 'number';?>" name="<?php echo $row2['regno'] ?>" class="form-control" id="basic-default-fullname"  placeholder="<?php echo $row2['regno'] ?>" <?php  if($row2['regno'] == $row1['regno'])  echo 'value=0'; ?> />
+                          <input type="hidden" name="<?php echo $row2['regno']."1" ?>" value="<?php echo $row2['regno']; ?>">
                           <?php } ?>
                         </div>
+                        <input type="hidden" name="scrby" value="<?php echo $row1['regno']; ?>">
                         <input type="hidden" name="team" value="<?php echo $row['team_id']; ?>">
-                        <input type="hidden" name="regno" value="<?php echo $row1['regno']; ?>">
                         <button type="submit" name="submit" class="btn btn-primary">Send</button>
                       </form>
                     </div>
