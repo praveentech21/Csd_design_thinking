@@ -1,8 +1,18 @@
 <?php
   session_start();
-  if(!isset($_SESSION['username'])) header('location:login.php');
-  
-
+  if(!isset($_SESSION['supid'])) header('location:login.php');
+  include('connect.php');
+  $teams = mysqli_query($con,"SELECT * FROM teams");
+  if(isset($_POST['submit'])){
+    $team = $_POST['team'];
+    $regno1 = $_POST['regno'];
+    $student = mysqli_query($con,"SELECT * FROM students where team ='$team' ");
+    while($row = mysqli_fetch_assoc($student)){
+      $score = $_POST[$row['regno']];
+      $regno = $row['regno'];
+      $sql = mysqli_query($con,"insert into score (scrto,scrby,team,score) values ('$regno1','$regno','$team','$score')");
+    }
+  }
 ?>
 <!DOCTYPE html>
 <html
@@ -111,7 +121,7 @@
 
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <!-- Search -->
-
+              <h3 style="padding-top: 20px;">Computer Science and Design</h3>
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <!-- Place this tag where you want the button to render. -->
                 <!-- User -->
@@ -146,70 +156,43 @@
 
             <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-bold">Student Scoring</h4>
-
+              
+              <?php
+                while($row = mysqli_fetch_assoc($teams)){
+                  $student = mysqli_query($con,"SELECT * FROM students WHERE team = '{$row['team_id']}'");
+                  $student1 = mysqli_query($con,"SELECT * FROM students WHERE team = '{$row['team_id']}'");
+                ?>
               <!-- Basic Layout -->
-              <div class="row">                
-                <div class="col-xl">
+              <div class="row">
+                <div class="row">
+              <div class="col-xl">
                   <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                      <h5 class="mb-0">Student Name</h5>
+                      <h5 class="mb-0"><?php echo $row['team_name'] ?></h5>
                     </div>
+                    <?php  while($row1 = mysqli_fetch_assoc($student)){
+                      $student1 = mysqli_query($con,"SELECT * FROM students WHERE team = '{$row['team_id']}'");  ?>
                     <div class="card-body">
-                      <form>
+                      
+                      <form method="post" action="#">
                         <div class="mb-3">
-                          <label class="form-label" for="basic-default-fullname">Full Name</label>
-                          <input type="text" class="form-control" id="basic-default-fullname" placeholder="John Doe" />
+                          <label class="form-label" for="basic-default-fullname"><?php echo $row1['student_name'] ?></label>
+                          <?php while($row2 = mysqli_fetch_assoc($student1)){ ?>
+                            <label class="form-label" for="basic-default-fullname"></label>
+                          <input type="<?php  if($row2['regno'] == $row1['regno'])  echo 'hidden';  else echo 'text';?>" name="<?php echo $row2['regno'] ?>" class="form-control" id="basic-default-fullname"  placeholder="<?php echo $row2['student_name'] ?>" <?php  if($row2['regno'] == $row1['regno'])  echo 'value=0'; ?> />
+                          <?php } ?>
                         </div>
-                        <div class="mb-3">
-                          <label class="form-label" for="basic-default-company">Company</label>
-                          <input type="text" class="form-control" id="basic-default-company" placeholder="ACME Inc." />
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <input type="hidden" name="team" value="<?php echo $row['team_id']; ?>">
+                        <input type="hidden" name="regno" value="<?php echo $row1['regno']; ?>">
+                        <button type="submit" name="submit" class="btn btn-primary">Send</button>
                       </form>
                     </div>
+                    <?php } ?>
                   </div>
-                </div>
-                <div class="col-xl">
-                  <div class="card mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                      <h5 class="mb-0">Student Name</h5>
-                    </div>
-                    <div class="card-body">
-                      <form>
-                        <div class="mb-3">
-                          <label class="form-label" for="basic-default-fullname">Full Name</label>
-                          <input type="text" class="form-control" id="basic-default-fullname" placeholder="John Doe" />
-                        </div>
-                        <div class="mb-3">
-                          <label class="form-label" for="basic-default-company">Company</label>
-                          <input type="text" class="form-control" id="basic-default-company" placeholder="ACME Inc." />
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send</button>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl">
-                  <div class="card mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                      <h5 class="mb-0">Student Name</h5>
-                    </div>
-                    <div class="card-body">
-                      <form>
-                        <div class="mb-3">
-                          <label class="form-label" for="basic-default-fullname">Full Name</label>
-                          <input type="text" class="form-control" id="basic-default-fullname" placeholder="John Doe" />
-                        </div>
-                        <div class="mb-3">
-                          <label class="form-label" for="basic-default-company">Company</label>
-                          <input type="text" class="form-control" id="basic-default-company" placeholder="ACME Inc." />
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send</button>
-                      </form>
-                    </div>
-                  </div>
-                </div>
               </div>
+              </div>
+            </div>
+                <!-- <?php   } ?> -->
             </div>
             <!-- / Content -->
 
