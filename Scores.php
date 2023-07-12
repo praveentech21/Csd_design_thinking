@@ -3,6 +3,16 @@
   if(!isset($_SESSION['supid'])) header('location:login.php');
   include('connect.php');
   $teams = mysqli_query($con,"SELECT * FROM teams");
+  if(isset($_POST['submit'])){
+    $team = $_POST['team'];
+    $regno1 = $_POST['regno'];
+    $student = mysqli_query($con,"SELECT * FROM students where team ='$team' ");
+    while($row = mysqli_fetch_assoc($student)){
+      $score = $_POST[$row['regno']];
+      $regno = $row['regno'];
+      $sql = mysqli_query($con,"insert into score (scrto,scrby,team,score) values ('$regno1','$regno','$team','$score')");
+    }
+  }
 ?>
 <!DOCTYPE html>
 <html
@@ -85,13 +95,13 @@
 
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
-            <li class="menu-item active">
+            <li class="menu-item">
               <a href="index.php" class="menu-link ">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
             </li>
-            <li class="menu-item ">
+            <li class="menu-item active">
               <a href="Scores.php" class="menu-link ">
               <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                 <div data-i18n="Analytics">Scores</div>
@@ -151,72 +161,46 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-bold">Team Wise Ranking</h4>
-
-            <!-- Bordered Table -->
-            <div class="card">
-              <?php while($row = mysqli_fetch_assoc($teams)){ 
-                $students = mysqli_query($con,"SELECT * FROM students WHERE team = '{$row['team_id']}' ");
-              ?>
-                <h5 class="card-header"><?php echo $row['team_name'] ?></h5>
-                <div class="card-body">
-                  <div class="table-responsive text-nowrap">
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Student Name</th>
-                          <th>Register Number</th>
-                          <th>Score</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <?php while($row1 = mysqli_fetch_assoc($students)){
-                          $scores = mysqli_fetch_assoc(mysqli_query($con,"SELECT avg(score) FROM score WHERE scrto = '{$row1['regno']}'"));
-                        ?>
-                        <tr>
-                          <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong><?php echo $row1['student_name'] ?></strong></td>
-                          <td><?php echo $row1['regno'] ?></td>
-                          <td><span class="badge bg-label-primary me-1"><?php echo $scores['avg(score)'] ?></span></td>
-                        </tr>
-                        <?php } ?>
-                      </tbody>
-                    </table>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-bold">Student Scoring</h4>
+              
+              <?php
+                while($row = mysqli_fetch_assoc($teams)){
+                  $student = mysqli_query($con,"SELECT * FROM students WHERE team = '{$row['team_id']}'");
+                  $student1 = mysqli_query($con,"SELECT * FROM students WHERE team = '{$row['team_id']}'");
+                ?>
+              <!-- Basic Layout -->
+                <div class="row">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><?php echo $row['team_name'] ?></h5>
+                  </div>
+                  <?php  while($row1 = mysqli_fetch_assoc($student)){
+                      $score_check = mysqli_query($con,"SELECT * FROM score WHERE scrto = '{$row1['regno']}'  AND team = '{$row['team_id']}'");
+                      if(mysqli_num_rows($score_check) == 0){ 
+                      $student1 = mysqli_query($con,"SELECT * FROM students WHERE team = '{$row['team_id']}'");  ?>
+                <div class="col-xl">
+                  <div class="card mb-4">
+                    <div class="card-body">
+                      
+                      <form method="post" action="#">
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-default-fullname"><?php echo $row1['student_name'] ?></label>
+                          <?php while($row2 = mysqli_fetch_assoc($student1)){ ?>
+                            <label class="form-label" for="basic-default-fullname"></label>
+                          <input type="<?php  if($row2['regno'] == $row1['regno'])  echo 'hidden';  else echo 'text';?>" name="<?php echo $row2['regno'] ?>" class="form-control" id="basic-default-fullname"  placeholder="<?php echo $row2['student_name'] ?>" <?php  if($row2['regno'] == $row1['regno'])  echo 'value=0'; ?> />
+                          <?php } ?>
+                        </div>
+                        <input type="hidden" name="team" value="<?php echo $row['team_id']; ?>">
+                        <input type="hidden" name="regno" value="<?php echo $row1['regno']; ?>">
+                        <button type="submit" name="submit" class="btn btn-primary">Send</button>
+                      </form>
+                    </div>
                   </div>
                 </div>
-                <?php } ?>
+                <?php }} ?>
             </div>
-
-            <!-- <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-bold">Design Thinking Ranking</h4> -->
-            <!--/ Bordered Table -->
-            <!-- <div class="card">
-                <h5 class="card-header">Student Wise Ranking</h5>
-                <div class="card-body">
-                  <div class="table-responsive text-nowrap">
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Student Name</th>
-                          <th>Team Name</th>
-                          <th>Register Number</th>
-                          <th>Score</th>
-                          <th>Ranking</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>Angular Project</strong></td>
-                          <td>Albert Cook</td>
-                          <td><span class="badge bg-label-primary me-1">Active</span></td>
-                          <td><span class="badge bg-label-info me-1">Scheduled</span></td>
-                          <td><span class="badge bg-label-success me-1">Completed</span></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+                <!-- <?php   } ?> -->
             </div>
-          </div> -->
-
+            <!-- / Content -->
 
             <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme">
