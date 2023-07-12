@@ -89,13 +89,13 @@
             <!-- Dashboard -->
             <li class="menu-item active">
               <a href="index.php" class="menu-link ">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <!-- <i class="menu-icon tf-icons bx bx-home-circle"></i> -->
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
             </li>
             <li class="menu-item ">
               <a href="Scores.php" class="menu-link ">
-              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+              <!-- <i class="menu-icon tf-icons bx bx-cube-alt"></i> -->
                 <div data-i18n="Analytics">Scores</div>
               </a>
             </li>
