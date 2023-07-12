@@ -3,6 +3,8 @@
   if(!isset($_SESSION['supid'])) header('location:login.php');
   include('connect.php');
   $teams = mysqli_query($con,"SELECT * FROM teams");
+  $rank = 1;
+  $students_scores = mysqli_query($con,"SELECT scrto FROM `score` GROUP BY scrto order by avg(score) desc");
 ?>
 <!DOCTYPE html>
 <html
@@ -186,9 +188,9 @@
                 <?php } ?>
             </div>
 
-            <!-- <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-bold">Design Thinking Ranking</h4> -->
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-bold">Design Thinking Ranking</h4>
             <!--/ Bordered Table -->
-            <!-- <div class="card">
+            <div class="card">
                 <h5 class="card-header">Student Wise Ranking</h5>
                 <div class="card-body">
                   <div class="table-responsive text-nowrap">
@@ -203,19 +205,26 @@
                         </tr>
                       </thead>
                       <tbody>
+                        <?php
+                          while($row = mysqli_fetch_assoc($students_scores)){
+                            $student = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM students WHERE regno = '{$row['scrto']}'"));
+                            $team = mysqli_fetch_assoc(mysqli_query($con,"SELECT * FROM teams WHERE team_id = '{$student['team']}'"));
+                            $scores = mysqli_fetch_assoc(mysqli_query($con,"SELECT avg(score) FROM score WHERE scrto = '{$row['scrto']}'"));
+                        ?>
                         <tr>
-                          <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>Angular Project</strong></td>
-                          <td>Albert Cook</td>
-                          <td><span class="badge bg-label-primary me-1">Active</span></td>
-                          <td><span class="badge bg-label-info me-1">Scheduled</span></td>
-                          <td><span class="badge bg-label-success me-1">Completed</span></td>
+                          <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong><?php echo $student['student_name'] ?></strong></td>
+                          <td><?php echo $team['team_name'] ?></td>
+                          <td><span class="badge bg-label-primary me-1"><?php echo $student['regno'] ?></span></td>
+                          <td><span class="badge bg-label-info me-1"><?php echo $scores['avg(score)'] ?> Points</span></td>
+                          <td><span class="badge bg-label-success me-1">Rank <?php echo $rank ?></span></td>
                         </tr>
+                        <?php $rank++; } ?>
                       </tbody>
                     </table>
                   </div>
                 </div>
             </div>
-          </div> -->
+          </div>
 
 
             <!-- Footer -->
