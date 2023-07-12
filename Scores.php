@@ -97,13 +97,13 @@
             <!-- Dashboard -->
             <li class="menu-item">
               <a href="index.php" class="menu-link ">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <!-- <i class="menu-icon tf-icons bx bx-home-circle"></i> -->
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
             </li>
             <li class="menu-item active">
               <a href="Scores.php" class="menu-link ">
-              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+              <!-- <i class="menu-icon tf-icons bx bx-cube-alt"></i> -->
                 <div data-i18n="Analytics">Scores</div>
               </a>
             </li>
@@ -186,7 +186,7 @@
                           <label class="form-label" for="basic-default-fullname"><?php echo $row1['student_name'] ?></label>
                           <?php while($row2 = mysqli_fetch_assoc($student1)){ ?>
                             <label class="form-label" for="basic-default-fullname"></label>
-                          <input type="<?php  if($row2['regno'] == $row1['regno'])  echo 'hidden';  else echo 'text';?>" name="<?php echo $row2['regno'] ?>" class="form-control" id="basic-default-fullname"  placeholder="<?php echo $row2['student_name'] ?>" <?php  if($row2['regno'] == $row1['regno'])  echo 'value=0'; ?> />
+                          <input type="<?php  if($row2['regno'] == $row1['regno'])  echo 'hidden';  else echo 'number';?>" name="<?php echo $row2['regno'] ?>" class="form-control" id="basic-default-fullname"  placeholder="<?php echo $row2['student_name'] ?>" <?php  if($row2['regno'] == $row1['regno'])  echo 'value=0'; ?> />
                           <?php } ?>
                         </div>
                         <input type="hidden" name="team" value="<?php echo $row['team_id']; ?>">
