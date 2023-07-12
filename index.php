@@ -163,15 +163,16 @@
                   $student1 = mysqli_query($con,"SELECT * FROM students WHERE team = '{$row['team_id']}'");
                 ?>
               <!-- Basic Layout -->
-              <div class="row">
                 <div class="row">
-              <div class="col-xl">
-                  <div class="card mb-4">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                      <h5 class="mb-0"><?php echo $row['team_name'] ?></h5>
-                    </div>
-                    <?php  while($row1 = mysqli_fetch_assoc($student)){
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><?php echo $row['team_name'] ?></h5>
+                  </div>
+                  <?php  while($row1 = mysqli_fetch_assoc($student)){
+                      $score_check = mysqli_query($con,"SELECT * FROM score WHERE scrto = '{$row1['regno']}'  AND team = '{$row['team_id']}'");
+                      if(mysqli_num_rows($score_check) == 0){ 
                       $student1 = mysqli_query($con,"SELECT * FROM students WHERE team = '{$row['team_id']}'");  ?>
+                <div class="col-xl">
+                  <div class="card mb-4">
                     <div class="card-body">
                       
                       <form method="post" action="#">
@@ -187,10 +188,9 @@
                         <button type="submit" name="submit" class="btn btn-primary">Send</button>
                       </form>
                     </div>
-                    <?php } ?>
                   </div>
-              </div>
-              </div>
+                </div>
+                <?php }} ?>
             </div>
                 <!-- <?php   } ?> -->
             </div>
