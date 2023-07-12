@@ -12,6 +12,7 @@
       $scrto = $_POST[$row['regno'].'1'];
       $sql = mysqli_query($con,"insert into score (scrto,scrby,team,score) values ('$scrto','$scrby','$team','$score')");
     }
+    // Storing data as per a person giving to another person his contribution to the project per person
   }
 ?>
 <!DOCTYPE html>
