@@ -7,6 +7,7 @@
   $students_scores = mysqli_query($con,"SELECT scrto FROM `score` GROUP BY scrto order by avg(score) desc");
 ?>
 <!DOCTYPE html>
+<!-- All Done Shiva -->
 <html
   lang="en"
   class="light-style layout-menu-fixed"

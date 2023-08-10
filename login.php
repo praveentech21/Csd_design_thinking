@@ -17,6 +17,7 @@ if(isset($_POST['submit'])){
 }
 
 ?><!DOCTYPE html>
+<!-- All Done Shiva -->
 <html
   lang="en"
   class="light-style customizer-hide"
